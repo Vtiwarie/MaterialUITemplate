@@ -3,13 +3,20 @@ package materialuitemplate.example.com.materialuitemplate.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.List;
+
 import materialuitemplate.example.com.materialuitemplate.R;
+import materialuitemplate.example.com.materialuitemplate.dummy.DummyContent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,8 +26,15 @@ import materialuitemplate.example.com.materialuitemplate.R;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends AbstractRecyclerFragment {
+    /**
+     * This fragment's layout resource ID.
+     */
     public static final int LAYOUT_RES_ID = R.layout.fragment_list;
+
+    /**
+     * This fragment's container ID
+     */
     public static final int FRAGMENT_ID = R.id.fragment_list_container;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -69,9 +83,31 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(LAYOUT_RES_ID, container, false);
+        updateUI(view);
         return view;
+    }
+
+    @Override
+    public void updateUI(View rootView) {
+        if (mAdapter == null) {
+            DummyContent dummyContent = DummyContent.getInstance();
+            List<DummyContent.DummyItem> items = dummyContent.getItems();
+            mAdapter = new AbstractRecyclerViewAdapter(items) {
+                @Override
+                public ViewHolder<DummyContent.DummyItem> createViewHolderTemplate(ViewGroup parent, int viewType) {
+                    View view = ListViewHolder.createView(android.R.layout.simple_list_item_1, parent, viewType);
+                    return new ListViewHolder(view);
+                }
+            };
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            setUpRecyclerView(R.id.recycler_list, rootView, mAdapter, layoutManager);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -115,10 +151,25 @@ public class ListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             //TODO: Add menu item options here for fragment-specific actions
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static class ListViewHolder extends AbstractRecyclerViewAdapter.ViewHolder<DummyContent.DummyItem> {
+        private TextView mTextView;
+
+        public ListViewHolder(View view) {
+            super(view);
+
+            mTextView = (TextView) view.findViewById(android.R.id.text1);
+        }
+
+        @Override
+        public void bindItem(DummyContent.DummyItem item) {
+            mTextView.setText(item.getContent());
         }
     }
 }

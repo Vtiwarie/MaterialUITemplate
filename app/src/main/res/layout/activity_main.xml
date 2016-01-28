@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:layout_collapseMode="pin"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/Theme.ToolbarOverlay"
             app:theme="@style/Theme.Toolbar"
             app:titleTextAppearance="@style/Theme.ToolbarText"

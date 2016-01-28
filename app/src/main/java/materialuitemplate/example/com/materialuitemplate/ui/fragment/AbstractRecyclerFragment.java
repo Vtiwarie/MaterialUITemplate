@@ -10,11 +10,22 @@ import android.view.ViewGroup;
 import java.util.List;
 
 /**
- * Extend this class to create a fragment with a recycler view
+ * Extend this class to create a fragment with a recycler view.
+ * Check out ListFragment class to see an example of this class in use.
  */
 abstract public class AbstractRecyclerFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
+    /**
+     * Adapter for the recycler view.  You can use the inner class AbstractRecyclerViewAdapter<T>
+     * or define your own.
+     */
+    protected RecyclerView.Adapter mAdapter;
+
+    /**
+     * The recycle view object.  It is created automatically by this class
+     * using the Recylcer container ID passed into the constructor
+     */
+    protected RecyclerView mRecyclerView;
 
     @Override
     abstract public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
@@ -27,12 +38,19 @@ abstract public class AbstractRecyclerFragment extends Fragment {
      * @param adapter recycler view adapter
      * @param layoutManager recycler view layout manager
      */
-    public void setUpRecyclerView(int recyclerViewId, View rootView, AbstractRecyclerViewAdapter adapter, RecyclerView.LayoutManager layoutManager) {
+    public void setUpRecyclerView(int recyclerViewId, View rootView, RecyclerView.Adapter adapter, RecyclerView.LayoutManager layoutManager) {
         mRecyclerView = (RecyclerView) rootView.findViewById(recyclerViewId);
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
         assert mRecyclerView != null;
     }
+
+    /**
+     * Override to update the recycler list's view
+     *
+     * @param view
+     */
+    abstract public void updateUI(View view);
 
     /**
      * Recycler view adapter class
@@ -43,24 +61,16 @@ abstract public class AbstractRecyclerFragment extends Fragment {
             extends RecyclerView.Adapter<AbstractRecyclerViewAdapter.ViewHolder<T>> {
 
         protected final List<T> mValues;
-        protected int mListViewLayout;
-        protected ViewHolder<T> mViewHolder;
 
-        public AbstractRecyclerViewAdapter(int listViewLayout, List<T> items, ViewHolder<T> viewHolder) {
+        public AbstractRecyclerViewAdapter(List<T> items) {
             mValues = items;
-            mListViewLayout = listViewLayout;
-            mViewHolder = viewHolder;
         }
 
-        protected View createView(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(mListViewLayout, parent, false);
-            return view;
-        }
+        abstract public ViewHolder<T> createViewHolderTemplate(ViewGroup parent, int viewType);
 
         @Override
         public ViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-            return mViewHolder;
+            return createViewHolderTemplate(parent, viewType);
         }
 
         @Override
@@ -81,13 +91,18 @@ abstract public class AbstractRecyclerFragment extends Fragment {
          */
         abstract public static class ViewHolder<T> extends RecyclerView.ViewHolder {
             //TODO: Extend this class and create member variables to store views to be displayed on the recycler
-
             public ViewHolder(View view) {
                 super(view);
             }
 
+            public static View createView(int list_item_res_id, ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(list_item_res_id, parent, false);
+                return view;
+            }
+
             /**
-             * Bind object of type T to the recycler view
+             * Override this function to bind the model object <T> to the list item view
              *
              * @param item
              */

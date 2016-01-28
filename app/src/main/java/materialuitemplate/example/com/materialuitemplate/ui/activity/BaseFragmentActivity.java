@@ -7,8 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * Use this class to create fragment-based activities.
- * Main Fragment is the fragment contains the main part of the
+ * Use this class to create fragment-based activities, in which
+ * the activity has at least one fragment.
+ * Main Fragment is the fragment that contains the main part of the
  * layout, such as list/recycler views, tab layouts, etc...
  */
 abstract public class BaseFragmentActivity extends AppCompatActivity {

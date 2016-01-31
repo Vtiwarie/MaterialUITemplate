@@ -17,7 +17,7 @@ abstract public class BaseFragmentActivity extends AppCompatActivity {
     /**
      * Create the main fragment to be displayed in the activity.
      *
-     * @return Fragment
+     * @return Fragment to create
      */
     abstract protected Fragment createFragment();
 

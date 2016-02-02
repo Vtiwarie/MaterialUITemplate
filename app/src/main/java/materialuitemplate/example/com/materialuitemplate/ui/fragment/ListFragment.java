@@ -53,6 +53,15 @@ public class ListFragment extends AbstractRecyclerFragment {
     }
 
     /**
+     * Implement this interface to interact with the calling activity, so that the calling activity
+     * can respond accordingly to changes or events triggered by this fragment.
+     */
+    public interface Callable {
+        // TODO: Update argument type and name
+        void onFragmentInteraction();
+    }
+
+    /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
@@ -83,31 +92,43 @@ public class ListFragment extends AbstractRecyclerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(LAYOUT_RES_ID, container, false);
-        updateUI(view);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        //TODO: Add your own custom view changes here...
         return view;
     }
 
     @Override
-    public void updateUI(View rootView) {
-        if (mAdapter == null) {
-            DummyContent dummyContent = DummyContent.getInstance();
-            List<DummyContent.DummyItem> items = dummyContent.getItems();
-            mAdapter = new AbstractRecyclerViewAdapter(items) {
-                @Override
-                public ViewHolder<DummyContent.DummyItem> createViewHolderTemplate(ViewGroup parent, int viewType) {
-                    View view = ListViewHolder.createView(android.R.layout.simple_list_item_1, parent, viewType);
-                    return new ListViewHolder(view);
-                }
-            };
+    public void updateUI() {
+        //TODO: Delete this call to the superclass if you desire to create your own update function
+        super.updateUI();
+    }
 
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            setUpRecyclerView(R.id.recycler_list, rootView, mAdapter, layoutManager);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
+    @Override
+    protected int getLayoutResId() {
+        return LAYOUT_RES_ID;
+    }
+
+    @Override
+    protected int getRecyclerViewId() {
+        return R.id.recycler_container;
+    }
+
+    @Override
+    protected RecyclerView.Adapter getRecyclerAdapter() {
+        DummyContent dummyContent = DummyContent.getInstance();
+        List<DummyContent.DummyItem> items = dummyContent.getItems();
+        return new AbstractRecyclerViewAdapter(items) {
+            @Override
+            public ViewHolder<DummyContent.DummyItem> createViewHolderTemplate(ViewGroup parent, int viewType) {
+                View view = ListViewHolder.createView(android.R.layout.simple_list_item_1, parent, viewType);
+                return new ListViewHolder(view);
+            }
+        };
+    }
+
+    @Override
+    protected RecyclerView.LayoutManager getLayoutManager() {
+        return new LinearLayoutManager(getActivity());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -134,15 +155,6 @@ public class ListFragment extends AbstractRecyclerFragment {
         mListener = null;
     }
 
-    /**
-     * Implement this interface to interact with the calling activity, so that the calling activity
-     * can respond accordingly to changes or events triggered by this fragment.
-     */
-    public interface Callable {
-        // TODO: Update argument type and name
-        void onFragmentInteraction();
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -158,6 +170,9 @@ public class ListFragment extends AbstractRecyclerFragment {
         }
     }
 
+    /**
+     * Extend the ViewHolder class defined in the AbtractRecyclerFragment class.
+     */
     public static class ListViewHolder extends AbstractRecyclerViewAdapter.ViewHolder<DummyContent.DummyItem> {
         private TextView mTextView;
 

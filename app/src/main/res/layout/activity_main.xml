@@ -33,14 +33,25 @@
                 app:titleTextAppearance="@style/Theme.ToolbarText"
                 />
 
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs_main"
+                style="@style/TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"/>
+
         </android.support.design.widget.AppBarLayout>
 
-        <!-- Add a fragment with scrolling capabilities -->
         <FrameLayout
-            android:id="@+id/fragment_list_container"
+            android:id="@+id/fragment_grid_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </FrameLayout>
 
         <android.support.design.widget.FloatingActionButton

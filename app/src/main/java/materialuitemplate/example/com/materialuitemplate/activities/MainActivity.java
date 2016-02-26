@@ -5,26 +5,33 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
 import materialuitemplate.example.com.materialuitemplate.R;
+import materialuitemplate.example.com.materialuitemplate.adapters.TabPagerAdapter;
+import materialuitemplate.example.com.materialuitemplate.fragments.DummyFragment;
 import materialuitemplate.example.com.materialuitemplate.fragments.ListFragment;
 
 /**
  * Main Activity class.
  */
-public class MainActivity extends BaseFragmentActivity implements ListFragment.Callable {
+public class MainActivity extends AppCompatActivity implements ListFragment.Callable {
 
     /**
      * Log tag for debugging
      */
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    private static final String[] TAB_TITLES = {"TAB 1", "TAB 2"};
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -53,22 +60,22 @@ public class MainActivity extends BaseFragmentActivity implements ListFragment.C
     private ActionBarDrawerToggle mDrawerToggle;
 
     /**
+     * Tab layout
+     */
+    private TabLayout mTabLayout;
+
+    /**
+     * View Pager
+     */
+    private ViewPager mViewPager;
+
+    /**
      * Get the layout ID for this activity.
      *
      * @return int layout resource ID
      */
     protected int getActivityLayoutResId() {
         return R.layout.activity_master_detail;
-    }
-
-    @Override
-    protected int getMainFragmentLayoutResId() {
-        return ListFragment.LAYOUT_RES_ID;
-    }
-
-    @Override
-    protected int getMainFragmentId() {
-        return ListFragment.FRAGMENT_ID;
     }
 
     /**
@@ -78,11 +85,6 @@ public class MainActivity extends BaseFragmentActivity implements ListFragment.C
      */
     protected int getDetailFragmentId() {
         return R.id.fragment_detail_container;
-    }
-
-    @Override
-    protected Fragment createFragment() {
-        return ListFragment.newInstance(null, null);
     }
 
     @Override
@@ -98,6 +100,20 @@ public class MainActivity extends BaseFragmentActivity implements ListFragment.C
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(getTitle());
+
+        //set up the view pager
+        mViewPager = (ViewPager) findViewById(R.id.viewpager_main);
+        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
+        tabPagerAdapter.setFragments(new Fragment[] {
+            new ListFragment(),
+            new DummyFragment()
+        });
+        tabPagerAdapter.setTitles(TAB_TITLES);
+        mViewPager.setAdapter(tabPagerAdapter);
+
+        //set up the tab layout
+        mTabLayout = (TabLayout) findViewById(R.id.tabs_main);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         //set up a floating action button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

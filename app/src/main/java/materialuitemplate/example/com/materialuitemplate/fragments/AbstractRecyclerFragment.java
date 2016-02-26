@@ -14,7 +14,7 @@ import android.view.ViewGroup;
  * view up and running.  See the ListFragment class to see an example
  * of this class in use.
  */
-abstract public class AbstractRecyclerFragment extends Fragment {
+abstract public class AbstractRecyclerFragment extends Fragment implements BaseFragment {
 
     /**
      * Adapter for the recycler view.  You can use the inner class AbstractRecyclerViewAdapter<T>
@@ -32,14 +32,6 @@ abstract public class AbstractRecyclerFragment extends Fragment {
      *  The layout manager for this recycler fragment.
      */
     protected RecyclerView.LayoutManager mLayoutManager;
-
-    /**
-     * Override this method to provide the id of the fragment container
-     * for which this fragment will be placed.
-     *
-     * @return fragment resource container ID
-     */
-    abstract protected int getLayoutResId();
 
     /**
      * Get the recycler view container ID

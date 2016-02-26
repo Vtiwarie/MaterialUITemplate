@@ -8,7 +8,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,15 +34,11 @@ import materialuitemplate.example.com.materialuitemplate.dummy.DummyContent;
  * create an instance of this fragment.
  */
 public class ListFragment extends AbstractRecyclerFragment {
-    /**
-     * This fragment's layout resource ID.
-     */
-    public static final int LAYOUT_RES_ID = R.layout.fragment_list;
 
     /**
-     * This fragment's container ID
+     * Callable object to interact with calling activity
      */
-    public static final int FRAGMENT_ID = R.id.fragment_list_container;
+    protected Callable mListener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,19 +49,8 @@ public class ListFragment extends AbstractRecyclerFragment {
     private String mParam1;
     private String mParam2;
 
-    private Callable mListener;
-
     public ListFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Implement this interface to interact with the calling activity, so that the calling activity
-     * can respond accordingly to changes or events triggered by this fragment.
-     */
-    public interface Callable {
-        // TODO: Update argument type and name
-        void onFragmentInteraction();
     }
 
     /**
@@ -98,22 +82,14 @@ public class ListFragment extends AbstractRecyclerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        //TODO: Add your own custom view changes here...
-        return view;
-    }
-
-    @Override
     public void updateUI() {
         //TODO: Delete this call to the superclass if you desire to create your own update function
         super.updateUI();
     }
 
     @Override
-    protected int getLayoutResId() {
-        return LAYOUT_RES_ID;
+    public int getLayoutResId() {
+        return R.layout.fragment_list;
     }
 
     @Override
@@ -137,13 +113,6 @@ public class ListFragment extends AbstractRecyclerFragment {
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getActivity());
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed() {
-        if (mListener != null) {
-            mListener.onFragmentInteraction();
-        }
     }
 
     @Override
@@ -210,5 +179,23 @@ public class ListFragment extends AbstractRecyclerFragment {
                 }
             });
         }
+    }
+
+
+    // TODO: Override this method, update argument and hook method into UI event
+    public void onButtonPressed() {
+        if (mListener != null) {
+            mListener.onFragmentInteraction();
+        }
+    }
+
+    /**
+     * Implement this interface to interact with the calling activity, so that the calling activity
+     * can respond accordingly to changes or events triggered by this fragment.
+     */
+    public interface Callable {
+        // TODO: Update argument type and name
+        void onFragmentInteraction();
+
     }
 }

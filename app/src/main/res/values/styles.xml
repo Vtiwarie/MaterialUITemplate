@@ -22,4 +22,10 @@
     <style name="Theme.ToolbarOverlay" parent="@style/ThemeOverlay.AppCompat.Light"></style>
     <style name="Theme.ToolbarText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title"></style>
     <style name="Theme.AppBarLayout"  parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
+
+    <!-- tab layout styles -->
+    <style name="TabLayout" parent="Base.Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/tabIndicatorColor</item>
+        <item name="tabIndicatorHeight">4dp</item>
+    </style>
 </resources>
